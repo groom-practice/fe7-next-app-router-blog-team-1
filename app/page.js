@@ -1,64 +1,54 @@
-"use client";
-
-import { posts } from "@/data/data";
+// app/page.js
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
-import style from "./layout.module.css";
+// import SearchBox from "../components/SearchBox";
 
-export default function Home() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+async function getPosts() {
+  const res = await fetch("http://localhost:3000/api/posts", {
+    cache: "no-store",
+  });
+  return res.json();
+}
 
-  const keyword = searchParams.get("q") || "";
-  const [input, setInput] = useState(keyword);
+export default async function Home({ searchParams }) {
+  const keyword = searchParams?.q || "";
+  const category = searchParams?.category || "";
 
-  const onChange = (e) => {
-    setInput(e.target.value);
-  };
+  const allPosts = await getPosts();
+  const filteredPosts = allPosts.filter((post) => {
+    const matchesKeyword = post.title
+      .toLowerCase()
+      .includes(keyword.toLowerCase());
+    const matchesCategory = category ? post.category === category : true;
+    return matchesKeyword && matchesCategory;
+  });
 
-  const onSearch = () => {
-    if (input) {
-      router.push(`/?q=${input}`);
-    } else {
-      router.push("/");
-    }
-  };
-
-  const filterPost = posts.filter((post) =>
-    post.title.toLowerCase().includes(keyword.toLowerCase()),
-  );
-
-  const onKeyDown = (e) => {
-    if (e.key === "Enter") {
-      onSearch();
-    }
-  };
   return (
-    <div>
-      <div className={style.container}>
-        <h2>블로그 글 목록</h2>
-        <input
-          value={input}
-          onChange={onChange}
-          onKeyDown={onKeyDown}
-          placeholder="검색어 입력"
-          className={style.input}
-        />
-        <button className={style.button} onClick={onSearch}>
-          검색
-        </button>
-        <ul>
-          {filterPost.map((post) => (
-            <li key={post.id}>
-              <Link href={`/posts/${post.id}`}>
-                <h3 className={style.title}> {post.title}</h3>{" "}
-                <span className={style.category}>{post.category}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+    <main className="p-6">
+      <h1 className="text-2xl font-bold mb-4">블로그 글 목록</h1>
+      {/* <SearchBox /> */}
+      <div className="flex gap-2 mt-2">
+        {["All", "React", "Next.js", "JavaScript"].map((cat) => (
+          <Link
+            key={cat}
+            href={cat === "All" ? "/" : `/?category=${cat}`}
+            className="text-blue-500 underline"
+          >
+            {cat}
+          </Link>
+        ))}
       </div>
-    </div>
+      <ul className="mt-4">
+        {filteredPosts.map((post) => (
+          <li key={post.id} className="border-b py-2">
+            <Link href={`/posts/${post.id}`} className="text-lg text-blue-600">
+              {post.title}
+            </Link>
+            <span className="ml-2 text-sm text-gray-500">
+              [{post.category}]
+            </span>
+          </li>
+        ))}
+      </ul>
+    </main>
   );
 }

@@ -10,7 +10,7 @@ export default function Home() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const keyword = searchParams?.q;
+  const keyword = searchParams.get("q") || "";
   const [input, setInput] = useState(keyword);
 
   const onChange = (e) => {
@@ -25,8 +25,9 @@ export default function Home() {
     }
   };
 
-  const filterPost = posts.filter((post) => post.title.includes(keyword));
-
+  const filterPost = posts.filter((post) =>
+    post.title.toLowerCase().includes(keyword.toLowerCase()),
+  );
   return (
     <div>
       <div className={style.container}>
@@ -41,7 +42,7 @@ export default function Home() {
           검색
         </button>
         <ul>
-          {posts.map((post) => (
+          {filterPost.map((post) => (
             <li key={post.id}>
               <Link href={`/posts/${post.id}`}>
                 <h3 className={style.title}> {post.title}</h3>{" "}

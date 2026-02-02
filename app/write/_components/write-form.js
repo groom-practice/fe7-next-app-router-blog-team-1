@@ -13,7 +13,7 @@ export default function WriteForm() {
     const router = useRouter();
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
-    const [category, setCategory] = useState("");
+    const [category, setCategory] = useState("React");
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -39,7 +39,7 @@ export default function WriteForm() {
         setTitle("");
         setContent("");
 
-        router.push(`/posts/${data.id}`);
+        router.push(`/`);
     }
 
     return (

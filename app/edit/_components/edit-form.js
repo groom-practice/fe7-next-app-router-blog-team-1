@@ -3,10 +3,17 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+const categories = [
+    "Next.js",
+    "React",
+    "JavaScript",
+];
+
 export default function EditForm({ post }) {
     const router = useRouter();
     const [title, setTitle] = useState(post?.title || "");
     const [content, setContent] = useState(post?.content || "");
+    const [category, setCategory] = useState(post?.category || "");
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -20,7 +27,7 @@ export default function EditForm({ post }) {
     const handleEditPost = async () => {
         const response = await fetch(`/api/posts/${post.id}`, {
             method: "PUT",
-            body: JSON.stringify({ title, content }),
+            body: JSON.stringify({ title, content, category }),
         });
 
         if (!response.ok) { return alert("글이 수정되지 않았습니다."); }
@@ -37,6 +44,14 @@ export default function EditForm({ post }) {
     return (
         <form className='flex flex-col gap-4 justify-center items-start w-1/2' onSubmit={handleSubmit}>
             <h2 className='text-2xl font-bold'>글 수정</h2>
+            <div className='flex flex-col gap-2 w-full'>
+                <label htmlFor="category">카테고리</label>
+                <select className='border border-gray-300 rounded-md p-2' id="category" name="category" value={category} onChange={(e) => setCategory(e.target.value)}>
+                    {categories.map((category) => (
+                        <option key={category} value={category}>{category}</option>
+                    ))}
+                </select>
+            </div>
             <div className='flex flex-col gap-2 w-full'>
                 <label htmlFor="title">제목</label>
                 <input className='border border-gray-300 rounded-md p-2' type="text" id="title" name="title" value={title} onChange={(e) => setTitle(e.target.value)} />

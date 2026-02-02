@@ -28,6 +28,12 @@ export default function Home() {
   const filterPost = posts.filter((post) =>
     post.title.toLowerCase().includes(keyword.toLowerCase()),
   );
+
+  const onKeyDown = (e) => {
+    if (e.key === "Enter") {
+      onSearch();
+    }
+  };
   return (
     <div>
       <div className={style.container}>
@@ -35,6 +41,7 @@ export default function Home() {
         <input
           value={input}
           onChange={onChange}
+          onKeyDown={onKeyDown}
           placeholder="검색어 입력"
           className={style.input}
         />

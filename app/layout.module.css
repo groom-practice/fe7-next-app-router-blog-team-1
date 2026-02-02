@@ -3,3 +3,29 @@
   text-decoration: none;
   margin-right: 12px;
 }
+
+.container {
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.button {
+  padding: 8px 14px;
+  border: none;
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.title,
+.category {
+  display: inline;
+  color: #3b82f6;
+}

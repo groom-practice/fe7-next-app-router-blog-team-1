@@ -1,18 +1,56 @@
+"use client";
+
 import { posts } from "@/data/data";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import style from "./layout.module.css";
 
-export default function Home({ searchParams }) {
+export default function Home() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const keyword = searchParams?.q;
+  const [input, setInput] = useState(keyword);
+
+  const onChange = (e) => {
+    setInput(e.target.value);
+  };
+
+  const onSearch = () => {
+    if (input) {
+      router.push(`/?q=${input}`);
+    } else {
+      router.push("/");
+    }
+  };
+
+  const filterPost = posts.filter((post) => post.title.includes(keyword));
+
   return (
     <div>
-      <div></div>
-      <h2>글 목록</h2>
-      <ul>
-        {posts.map((post) => (
-          <li key={post.id}>
-            <Link href={`/posts/${post.id}`}>{post.title}</Link>
-          </li>
-        ))}
-      </ul>
+      <div className={style.container}>
+        <h2>블로그 글 목록</h2>
+        <input
+          value={input}
+          onChange={onChange}
+          placeholder="검색어 입력"
+          className={style.input}
+        />
+        <button className={style.button} onClick={onSearch}>
+          검색
+        </button>
+        <ul>
+          {posts.map((post) => (
+            <li key={post.id}>
+              <Link href={`/posts/${post.id}`}>
+                <h3 className={style.title}> {post.title}</h3>{" "}
+                <span className={style.category}>{post.category}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

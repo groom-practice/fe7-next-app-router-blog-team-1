@@ -38,7 +38,7 @@ export default function EditForm({ post }) {
         setTitle("");
         setContent("");
 
-        router.push(`/posts/${data.id}`);
+        router.push(`/`);
     }
 
     return (

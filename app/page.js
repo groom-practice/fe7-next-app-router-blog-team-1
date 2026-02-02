@@ -1,6 +1,6 @@
 // app/page.js
 import Link from "next/link";
-// import SearchBox from "../components/SearchBox";
+import SearchBox from "../components/SearchBox";
 
 async function getPosts() {
   const res = await fetch("http://localhost:3000/api/posts", {
@@ -25,7 +25,7 @@ export default async function Home({ searchParams }) {
   return (
     <main className="p-6">
       <h1 className="text-2xl font-bold mb-4">블로그 글 목록</h1>
-      {/* <SearchBox /> */}
+      <SearchBox />
       <div className="flex gap-2 mt-2">
         {["All", "React", "Next.js", "JavaScript"].map((cat) => (
           <Link

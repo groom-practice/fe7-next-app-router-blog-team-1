@@ -20,6 +20,7 @@ export async function PUT(req, { params }) {
 
   post.title = body.title ?? post.title;
   post.content = body.content ?? post.content;
+  post.category = body.category ?? post.category;
 
   return Response.json(post);
 }
